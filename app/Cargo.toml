@@ -1,5 +1,5 @@
 [package]
-name = "wakatime-notion-diary-core"
+name = "wakatime-notion-diary-app"
 version = "0.1.0"
 edition = "2021"
 publish = false
