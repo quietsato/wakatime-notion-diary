@@ -1,13 +1,21 @@
-use super::{SummariesRequestError, SummariesResponse};
+use super::{Summaries, SummariesRequestError};
 use base64::{self, Engine};
 
 #[derive(Debug)]
 pub struct SummariesRequest {
-    pub api_key: String,
+    api_key: String,
 }
 
 impl SummariesRequest {
-    fn get(&self) -> Result<SummariesResponse, SummariesRequestError> {
+    pub fn new(api_key: impl ToString) -> Self {
+        Self {
+            api_key: api_key.to_string(),
+        }
+    }
+}
+
+impl SummariesRequest {
+    pub fn get(&self) -> Result<Summaries, SummariesRequestError> {
         reqwest::blocking::Client::new()
             .request(
                 reqwest::Method::GET,
@@ -23,7 +31,7 @@ impl SummariesRequest {
             .query(&[["range", "Today"]])
             .send()
             .map_err(SummariesRequestError::http_error)?
-            .json::<SummariesResponse>()
+            .json::<Summaries>()
             .map_err(SummariesRequestError::parse_error)
     }
 }

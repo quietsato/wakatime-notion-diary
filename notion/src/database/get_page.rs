@@ -1,9 +1,8 @@
-mod error;
-mod response;
+pub mod error;
+pub mod response;
 
-use self::response::Page;
-pub use self::{error::GetPageError, response::GetPageResponse};
-use crate::api::NotionApi;
+use self::{error::GetPageError, response::Page};
+use crate::{api::NotionApi, GetPageResponse};
 use serde::Serialize;
 
 pub trait GetPage {
