@@ -794,6 +794,10 @@ name = "wakatime-notion-diary-core"
 version = "0.1.0"
 
 [[package]]
+name = "wakatime-notion-diary-notion"
+version = "0.1.0"
+
+[[package]]
 name = "wakatime-notion-diary-wakatime"
 version = "0.1.0"
 dependencies = [
