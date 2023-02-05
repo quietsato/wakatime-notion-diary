@@ -7,7 +7,7 @@ use self::data::SummariesData;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize, PartialEq)]
-pub struct SummariesResponse {
+pub struct Summaries {
     pub data: Vec<SummariesData>,
 }
 
@@ -17,7 +17,7 @@ mod test {
         response::{
             data::SummariesData, grand_total::GrandTotal, language::Language, projects::Project,
         },
-        SummariesResponse,
+        Summaries,
     };
 
     #[test]
@@ -152,13 +152,13 @@ mod test {
           }
         "#;
 
-        let parsed = serde_json::from_str::<SummariesResponse>(JSON_STR);
+        let parsed = serde_json::from_str::<Summaries>(JSON_STR);
         assert!(parsed.is_ok(), "{:?}", parsed.unwrap_err());
 
         let parsed = parsed.unwrap();
         assert_eq!(
             parsed,
-            SummariesResponse {
+            Summaries {
                 data: vec![SummariesData {
                     grand_total: GrandTotal {
                         digital: "1:13".into(),
