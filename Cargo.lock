@@ -979,6 +979,7 @@ name = "wakatime-notion-diary-notion"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "dotenv",
  "reqwest",
  "serde",
  "serde_json",
