@@ -1,0 +1,32 @@
+name: Diary
+
+on:
+  schedule:
+    - cron:  '0 23 * * *'  # JST 23:00
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+
+      - name: Restore Rust cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Run
+        uses: actions-rs/cargo@v1
+        with:
+          command: run
+          args: --release
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+
