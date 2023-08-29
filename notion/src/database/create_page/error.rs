@@ -1,19 +1,19 @@
 use std::fmt::Display;
 
 #[derive(Debug, Clone)]
-pub enum GetPageError {
+pub enum CreatePageError {
     HttpError(String),
     ParseError(String),
     NotFound,
 }
 
-impl Display for GetPageError {
+impl Display for CreatePageError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{self:?}")
     }
 }
 
-impl GetPageError {
+impl CreatePageError {
     pub fn http_error(err: impl ToString) -> Self {
         Self::HttpError(err.to_string())
     }
