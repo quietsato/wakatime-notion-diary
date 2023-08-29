@@ -66,14 +66,6 @@ impl<Tz: TimeZone> Logic for AppLogic<Tz> {
     }
 
     fn build_create_page_query(&self) -> Result<Self::CreatePageQuery, String> {
-        let today = self
-            .today
-            .with_hour(0)
-            .and_then(|day| day.with_minute(0))
-            .and_then(|day| day.with_second(0))
-            .and_then(|day| day.with_nanosecond(0))
-            .ok_or("Failed to construct day_start")?
-            .with_timezone(&Utc);
         Ok(json!({
             "properties": {
                 "Name": {
