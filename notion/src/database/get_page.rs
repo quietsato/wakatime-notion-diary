@@ -1,9 +1,13 @@
 pub mod error;
 pub mod response;
 
-use self::{error::GetPageError, response::Page};
+use std::io::Read;
+
+use self::error::GetPageError;
 use crate::{api::NotionApi, GetPageResponse};
 use serde::Serialize;
+
+use super::models::page::Page;
 
 pub trait GetPage {
     fn get_page(&self, query: impl Serialize) -> Result<Page, GetPageError>;
@@ -11,7 +15,7 @@ pub trait GetPage {
 
 impl GetPage for NotionApi {
     fn get_page(&self, query: impl Serialize) -> Result<Page, GetPageError> {
-        let res = reqwest::blocking::Client::new()
+        let mut res = reqwest::blocking::Client::new()
             .request(
                 reqwest::Method::POST,
                 format!(
@@ -23,9 +27,15 @@ impl GetPage for NotionApi {
             .header("Notion-Version", "2022-06-28")
             .json(&query)
             .send()
-            .map_err(GetPageError::http_error)?
-            .json::<GetPageResponse>()
-            .unwrap();
+            .map_err(GetPageError::http_error)?;
+
+        let res = {
+            let mut buf = String::new();
+            res.read_to_string(&mut buf)
+                .map_err(GetPageError::parse_error)?;
+            serde_json::from_str::<GetPageResponse>(&buf)
+                .map_err(|e| GetPageError::parse_error(format!("{e}\n{buf}")))?
+        };
 
         res.results
             .first()
@@ -36,8 +46,10 @@ impl GetPage for NotionApi {
 
 #[cfg(test)]
 mod test {
+    use std::str::FromStr;
+
     use serde_json::json;
-    use uuid::uuid;
+    use uuid::Uuid;
 
     use crate::api::NotionApi;
 
@@ -46,7 +58,12 @@ mod test {
     #[ignore]
     #[test]
     fn test_get_page() {
-        let api = NotionApi::new("", &uuid!("b2f8f49f-9ed0-4c04-a282-38b4adc504ad"));
+        dotenv::dotenv().ok();
+
+        let api = NotionApi::new(
+            std::env::var("NOTION_API_KEY").unwrap(),
+            &Uuid::from_str(&std::env::var("NOTION_DATABASE_ID").unwrap()).unwrap(),
+        );
 
         let res = api.get_page(json!({
             "filter": {
@@ -54,13 +71,13 @@ mod test {
                     {
                         "property": "Date",
                         "date": {
-                            "on_or_after": "2023-02-04T05:54:36Z"
+                            "on_or_after": "2023-06-01T00:00:00Z"
                         }
                     },
                     {
                         "property": "Date",
                         "date": {
-                            "before": "2023-02-05T05:54:36Z"
+                            "before": "2023-06-02T00:00:00Z"
                         }
                     },
                 ]
