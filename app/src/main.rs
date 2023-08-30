@@ -15,8 +15,15 @@ pub struct AppConfig<Tz: TimeZone> {
 pub fn main() {
     dotenv::dotenv().ok();
 
-    let jst = FixedOffset::east_opt(9 * 3600).unwrap();
-    let now = Utc::now().with_timezone(&jst);
+    let now = if let Some(arg_datetime) = std::env::args().nth(1) {
+        // Parse command line argument
+        DateTime::parse_from_rfc3339(&arg_datetime)
+            .expect(&format!("Failed to parse rfc3339: {arg_datetime}"))
+    } else {
+        // Get current time
+        let jst = FixedOffset::east_opt(9 * 3600).unwrap();
+        Utc::now().with_timezone(&jst)
+    };
     println!("Current Time: {}", now.to_rfc3339());
 
     let config = AppConfig {
@@ -28,10 +35,11 @@ pub fn main() {
     let logic = AppLogic::new(config.today);
 
     println!("Fetching Wakatime Status");
-    let wakatime_summaries = match SummariesRequest::new(&config.wakatime_api_key).get() {
-        Ok(res) => res,
-        Err(err) => panic!("Failed to get wakatime summaries: {err}"),
-    };
+    let wakatime_summaries =
+        match SummariesRequest::new(&config.wakatime_api_key, config.today).get() {
+            Ok(res) => res,
+            Err(err) => panic!("Failed to get wakatime summaries: {err}"),
+        };
 
     // Build queries
     println!("Building Notion Queries");

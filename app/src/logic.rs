@@ -77,6 +77,11 @@ impl<Tz: TimeZone> Logic for AppLogic<Tz> {
                         }
                     ]
                 },
+                "Custom Date": {
+                    "date": {
+                        "start": self.today.to_rfc3339()
+                    }
+                }
             }
         }))
     }
