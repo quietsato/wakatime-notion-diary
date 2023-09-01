@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::{database::create_page::error::CreatePageError, GetPageError};
+use crate::{CreatePageError, GetPageError};
 
 #[derive(Debug, Clone)]
 pub enum GetOrCreatePageError {
