@@ -55,15 +55,15 @@ mod test {
     use super::*;
     use crate::api::NotionApi;
     use serde_json::json;
-    use uuid::uuid;
+    use std::str::FromStr;
 
-    #[ignore = "no api keys"]
+    #[ignore]
     #[test]
     fn test_append_blocks() {
-        let api = NotionApi::new("", &uuid!("b2f8f49f-9ed0-4c04-a282-38b4adc504ad"));
+        let api = NotionApi::new("api_key", &Uuid::from_str("page_id").unwrap());
 
         let res = api.append_blocks(
-            &uuid!("12ffa5e1-8f99-4883-b41a-799bb0fc77bc"),
+            &Uuid::from_str("page_id").unwrap(),
             json!({
                 "children": [
                     {
