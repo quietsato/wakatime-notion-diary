@@ -5,7 +5,7 @@ on:
     - cron:  '0 14 * * *'  # JST 23:00
 
 jobs:
-  build-and-lint:
+  run:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
