@@ -2,12 +2,10 @@ pub mod error;
 pub mod response;
 
 use self::error::CreatePageError;
-use crate::{api::NotionApi, CreatePageResponse};
+use crate::{CreatePageResponse, NotionApi, Page};
 use serde::Serialize;
 use serde_json::json;
 use std::io::Read;
-
-use super::models::page::Page;
 
 pub trait CreatePage {
     fn create_page(&self, query: impl Serialize) -> Result<Page, CreatePageError>;
@@ -44,8 +42,7 @@ impl CreatePage for NotionApi {
 
 #[cfg(test)]
 mod test {
-    use super::CreatePage;
-    use crate::api::NotionApi;
+    use super::*;
     use serde_json::json;
     use std::str::FromStr;
     use uuid::Uuid;

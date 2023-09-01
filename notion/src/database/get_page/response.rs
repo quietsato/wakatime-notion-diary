@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use crate::database::models::page::Page;
+use crate::Page;
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct GetPageResponse {

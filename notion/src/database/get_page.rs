@@ -1,13 +1,10 @@
 pub mod error;
 pub mod response;
 
-use std::io::Read;
-
 use self::error::GetPageError;
-use crate::{api::NotionApi, GetPageResponse};
+use crate::{GetPageResponse, NotionApi, Page};
 use serde::Serialize;
-
-use super::models::page::Page;
+use std::io::Read;
 
 pub trait GetPage {
     fn get_page(&self, query: impl Serialize) -> Result<Page, GetPageError>;
@@ -46,14 +43,10 @@ impl GetPage for NotionApi {
 
 #[cfg(test)]
 mod test {
-    use std::str::FromStr;
-
+    use super::*;
     use serde_json::json;
+    use std::str::FromStr;
     use uuid::Uuid;
-
-    use crate::api::NotionApi;
-
-    use super::GetPage;
 
     #[ignore]
     #[test]

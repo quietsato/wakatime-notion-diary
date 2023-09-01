@@ -1,4 +1,4 @@
-use super::{Summaries, SummariesRequestError};
+use crate::summaries::{Summaries, SummariesRequestError};
 use base64::{self, Engine};
 use chrono::{DateTime, TimeZone, Timelike, Utc};
 

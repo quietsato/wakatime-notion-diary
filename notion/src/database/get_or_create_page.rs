@@ -2,8 +2,7 @@ pub mod error;
 pub mod response;
 
 use self::error::GetOrCreatePageError;
-use super::{create_page::CreatePage, models::page::Page};
-use crate::{GetPage, GetPageError};
+use crate::{CreatePage, GetPage, GetPageError, Page};
 use serde::Serialize;
 
 pub trait GetOrCreatePage {
